@@ -1,0 +1,111 @@
+[gd_scene load_steps=8 format=3 uid="uid://vlfk2j7qd3nk"]
+
+[ext_resource type="Script" path="res://NPCS/Goblin/GoblinTorso.gd" id="1_gdbsl"]
+[ext_resource type="Material" uid="uid://dfmu30grtst8o" path="res://NPCS/Goblin/GoblinSkin.tres" id="2_577qe"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5xbcc"]
+height = 1.5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_hx8m7"]
+material = ExtResource("2_577qe")
+height = 1.5
+
+[sub_resource type="Animation" id="Animation_sph3y"]
+length = 0.001
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RightThigh")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LeftThigh")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
+tracks/2/type = "rotation_3d"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("LeftShoulder")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("RightShoulder")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_i2qfm"]
+resource_name = "Walking"
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LeftThigh")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12, 0.25, 1, 0.924, 2.08165e-12, 2.08165e-12, 0.383, 0.5, 1, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12, 0.75, 1, 0.924, -0.001, -0.001, -0.383, 1, 1, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RightThigh")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.25, 1, 0.383, 2.08165e-12, 2.08165e-12, 0.924, 0.5, 1, 0, 0, 0, 1, 0.75, 1, -0.383, -0.001, 2.08165e-12, 0.924, 1, 1, 0, 0, 0, 1)
+tracks/2/type = "rotation_3d"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("LeftShoulder")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, -1, 2.08165e-12, 2.08165e-12, 2.08165e-12, 0.25, 1, 0.985, 2.08165e-12, 2.08165e-12, -0.174, 0.5, 1, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12, 0.75, 1, 0.985, 2.08165e-12, 2.08165e-12, 0.174, 1, 1, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("RightShoulder")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.25, 1, -0.174, 2.08165e-12, 2.08165e-12, 0.985, 0.5, 1, 0, 0, 0, 1, 0.75, 1, 0.174, 2.08165e-12, 2.08165e-12, 0.985, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_yi0wy"]
+_data = {
+"RESET": SubResource("Animation_sph3y"),
+"Walking": SubResource("Animation_i2qfm")
+}
+
+[node name="GoblinTorso" type="RigidBody3D"]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_gdbsl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_5xbcc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_hx8m7")
+
+[node name="Neck" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.030688, 0.821877, -0.0367579)
+
+[node name="LeftShoulder" type="Marker3D" parent="."]
+transform = Transform3D(-1, -1.50996e-07, -1.50996e-07, -1.50996e-07, 1, 4.1633e-12, -1.50996e-07, -4.1861e-12, 1, -0.45, 0.365, 2.08165e-12)
+
+[node name="RightShoulder" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0.365, 2.08165e-12)
+
+[node name="LeftThigh" type="Marker3D" parent="."]
+transform = Transform3D(-1, -1.50996e-07, -1.50996e-07, -1.50996e-07, 1, 4.1633e-12, -1.50996e-07, -4.1861e-12, 1, -0.32, -0.46, 2.08165e-12)
+
+[node name="RightThigh" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.32, -0.46, 2.08165e-12)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+method_call_mode = 1
+libraries = {
+"": SubResource("AnimationLibrary_yi0wy")
+}

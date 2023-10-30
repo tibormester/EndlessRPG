@@ -1,0 +1,59 @@
+[gd_scene load_steps=8 format=3 uid="uid://q5syc3gca0m"]
+
+[ext_resource type="Script" path="res://BodyParts/Head.gd" id="1_1tojb"]
+[ext_resource type="Material" uid="uid://celmnw5b0aic5" path="res://BodyParts/SkinTone.tres" id="2_f3i8m"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_bmd7j"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_hjw3p"]
+material = ExtResource("2_f3i8m")
+
+[sub_resource type="SphereMesh" id="SphereMesh_v5nkx"]
+radius = 0.075
+height = 0.15
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_rmhgi"]
+radius = 0.01
+height = 0.3
+
+[sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_mskvo"]
+
+[node name="Head" type="RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.312797, 0)
+collision_layer = 0
+collision_mask = 0
+gravity_scale = 2.66454e-15
+freeze = true
+script = ExtResource("1_1tojb")
+stats = null
+actions = null
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_bmd7j")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_hjw3p")
+
+[node name="LeftEye" type="MeshInstance3D" parent="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.157433, 0.189812, -0.404412)
+mesh = SubResource("SphereMesh_v5nkx")
+
+[node name="RightEye" type="MeshInstance3D" parent="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.135153, 0.189812, -0.404412)
+mesh = SubResource("SphereMesh_v5nkx")
+
+[node name="Mouth" type="MeshInstance3D" parent="MeshInstance3D"]
+transform = Transform3D(-4.37114e-08, -1, 3.48787e-16, 1, -4.37114e-08, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, -0.0138891, -0.131715, -0.484231)
+mesh = SubResource("CapsuleMesh_rmhgi")
+skeleton = NodePath("../RightEye")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="."]
+shape = SubResource("SeparationRayShape3D_mskvo")
+spring_length = 3.0
+
+[node name="ThirdPersonCamera" type="Camera3D" parent="SpringArm3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 3)
+current = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.449359)

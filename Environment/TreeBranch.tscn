@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://q57agwimc54d"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_5mia1"]
+radius = 0.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2s1bt"]
+albedo_color = Color(0.639216, 0.980392, 0.184314, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_cyeh4"]
+material = SubResource("StandardMaterial3D_2s1bt")
+radius = 0.6
+height = 0.7
+
+[node name="TreeBranch" type="RigidBody3D"]
+freeze = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 0.4)
+shape = SubResource("SphereShape3D_5mia1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.39979)
+mesh = SubResource("SphereMesh_cyeh4")

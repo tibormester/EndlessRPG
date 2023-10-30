@@ -1,0 +1,68 @@
+[gd_scene load_steps=13 format=3 uid="uid://xnlmv187rdy1"]
+
+[ext_resource type="PackedScene" uid="uid://b55d3tck87obi" path="res://Character.tscn" id="1_crvht"]
+[ext_resource type="Script" path="res://Main.gd" id="1_idjuq"]
+[ext_resource type="PackedScene" uid="uid://c7nxc2677ah6r" path="res://Environment/Tree.tscn" id="2_waiof"]
+[ext_resource type="PackedScene" uid="uid://dyupgh0csbbuj" path="res://NPCS/Goblin/Goblin.tscn" id="3_w032f"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_8pk33"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_jvuae"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_mwtqb"]
+in_3d_space = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uhxcw"]
+albedo_color = Color(0.501961, 0.556863, 0.231373, 1)
+roughness = 0.74
+roughness_texture = SubResource("NoiseTexture2D_mwtqb")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_1ju4a"]
+material = SubResource("StandardMaterial3D_uhxcw")
+size = Vector2(100, 100)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_l5d8k"]
+
+[sub_resource type="Sky" id="Sky_utm20"]
+sky_material = SubResource("ProceduralSkyMaterial_l5d8k")
+
+[sub_resource type="Environment" id="Environment_qaw0h"]
+background_mode = 2
+sky = SubResource("Sky_utm20")
+
+[node name="Main" type="Node"]
+script = ExtResource("1_idjuq")
+
+[node name="Character" parent="." instance=ExtResource("1_crvht")]
+transform = Transform3D(1, 0, -1.51982e-08, 0, 1, 0, 9.58136e-09, 0, 1, 0, 2.80236, 4.76837e-07)
+
+[node name="Goblin" parent="." instance=ExtResource("3_w032f")]
+transform = Transform3D(-0.217172, 0, -0.976133, 0, 1, 0, 0.976133, 0, -0.217172, 17.3553, 3.29541, -4.91502)
+
+[node name="Tree4" parent="." instance=ExtResource("2_waiof")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.4065, 0, -13.4842)
+
+[node name="Tree3" parent="." instance=ExtResource("2_waiof")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.3951, 0, -7.82909)
+
+[node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, -1, 2.08165e-12)
+physics_material_override = SubResource("PhysicsMaterial_8pk33")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("WorldBoundaryShape3D_jvuae")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("PlaneMesh_1ju4a")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.402267, 0.915522, 0, -0.915522, 0.402267, 2.08165e-12, 100, 2.08165e-12)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_qaw0h")
+
+[node name="Tree" parent="." instance=ExtResource("2_waiof")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.2703, 0, 0)
+
+[node name="Tree2" parent="." instance=ExtResource("2_waiof")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.2718, 0, -4.80707)

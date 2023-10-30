@@ -1,0 +1,60 @@
+[gd_scene load_steps=8 format=3 uid="uid://b55d3tck87obi"]
+
+[ext_resource type="Script" path="res://Character.gd" id="1_qtcwg"]
+[ext_resource type="PackedScene" uid="uid://dqlxbn3m8jjcu" path="res://BodyParts/Torso.tscn" id="2_4ango"]
+[ext_resource type="Script" path="res://BodyParts/HumanoidMovement.gd" id="3_mdj0r"]
+[ext_resource type="Script" path="res://CharacterComponents/PlayerInputController.gd" id="4_akqrj"]
+[ext_resource type="Script" path="res://CharacterComponents/HealthUIComponent.gd" id="5_jlhtu"]
+[ext_resource type="Script" path="res://CharacterComponents/ProfileUIComponent.gd" id="6_e5d25"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_t3fjj"]
+height = 0.1
+radius = 0.1
+
+[node name="Character" type="CharacterBody3D"]
+floor_constant_speed = true
+script = ExtResource("1_qtcwg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CylinderShape3D_t3fjj")
+
+[node name="Torso" parent="." instance=ExtResource("2_4ango")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="HumanoidMovement" type="Node" parent="."]
+script = ExtResource("3_mdj0r")
+
+[node name="PlayerInputController" type="Node" parent="."]
+script = ExtResource("4_akqrj")
+
+[node name="HealthUIComponent" type="Node" parent="."]
+script = ExtResource("5_jlhtu")
+
+[node name="HealthBar" type="Label" parent="HealthUIComponent"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 2
+uppercase = true
+
+[node name="ProfileUIComponent" type="Node" parent="."]
+script = ExtResource("6_e5d25")
+
+[node name="StatPanel" type="Panel" parent="ProfileUIComponent"]
+visible = false
+custom_minimum_size = Vector2(1, 1)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="StatList" type="VBoxContainer" parent="ProfileUIComponent/StatPanel"]
+layout_mode = 1

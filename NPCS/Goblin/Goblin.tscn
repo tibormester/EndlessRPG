@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://dyupgh0csbbuj"]
+
+[ext_resource type="Script" path="res://Character.gd" id="1_48x6i"]
+[ext_resource type="Script" path="res://BodyParts/HumanoidMovement.gd" id="2_k2txc"]
+[ext_resource type="PackedScene" uid="uid://vlfk2j7qd3nk" path="res://NPCS/Goblin/GoblinTorso.tscn" id="4_by4vj"]
+[ext_resource type="Script" path="res://NPCS/EnemyAIComponent.gd" id="4_y2qc7"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_q5cac"]
+height = 0.1
+radius = 0.1
+
+[node name="Goblin" type="CharacterBody3D"]
+script = ExtResource("1_48x6i")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CylinderShape3D_q5cac")
+
+[node name="GoblinTorso" parent="." instance=ExtResource("4_by4vj")]
+gravity_scale = 2.66454e-15
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="HumanoidMovement" type="Node" parent="."]
+script = ExtResource("2_k2txc")
+
+[node name="EnemyAIComponent" type="Node" parent="."]
+script = ExtResource("4_y2qc7")
