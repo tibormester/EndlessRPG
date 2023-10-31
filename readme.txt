@@ -1,3 +1,84 @@
+v1.0.2
+Endless RPG Design Document
+Model-View Architecture
+Advantages
+The advantage of Model-View is the simplicity in managing networking code as only model data needs to be transmitted, as well as ensuring efficient performance. The key areas for these performance increases will be with the headless server performance, as well as the ease of implementing performance saving graphics settings without interfering with gameplay elements. Additionally, this view will make it simple to implement save/load systems since there won’t be a need to translate viewable objects into their data component (the model components will be essentially already translated)
+Implementation
+To achieve this structure, the abstracted game entities utilizing Entity Component System (ECS) Architecture will be pure data abstractions, and their rendered physical objects will be godot Node3D objects in the more traditional sense that will be instanced into the scene with a similar tree structure to the ECS system but more reliant on physical location hierarchy. This means that if a character is in a vehicle the Viewable Node3D Character class will be a child of the vehicle node, but the Modeled Node Character class will be its own root and a reference stored in the server chunk manager singleton (The exact implementation of chunk rendering is still TBD)
+Entity Component System
+Advantages
+Very modular, an entity has data in components and a system operates on all entities based on the relevant components. Theoretically can do everything probably. Very nice if you want to be able to plug and play with different combinations of modifiers and components on objects, exactly what one would want in a sandbox rpg.
+Disadvantages
+A strict ECS system can be cumbersome. Want a component that is another component but slightly different and with a tweaked system? Well thats exactly what you have to do… write another system and add relevant components to everything that needs it. Want different systems for different entities? Add a component the gives a type variable to all entities and add that ass a parameter to both systems… Technically everything is feasible, but polymorphism and inheritance are super nice.
+Modifications- Containers, Components, and Local Systems
+How about making the entity the system? Make a general entity class and iterate on it with object orientated design to get the specific system implementations. A generic container will have components and other containers, how the root container inherits the child container components is specified in the container object implementations both for the root and for the child. Now each container will execute functions depending on its own components. 
+
+One short coming however is that now these system container objects might have few components but a lot of systems constantly checking for components. So the solution is to have the containers split into two parts: the mandatory systems that are integral to their identity as the type of container they are, and then the functions that define any unique accommodations for any kind of component while leaving the rest of the components to contain their own system that is called from the container and acts locally on it. 
+
+This modification is like tying the System to its relevent components such that the system only runs when the components are being rendered, but its a bit better because we are allowing the entity the freedom of managing the system’s behaviour depending on the type of entity. 
+
+For example a player container with a fire component might have the result of taking health damage over time, but a tree container with the same component but also a flammable stat component would have the result of spreading the fire and spawning fire instances in it’s branches. 
+
+This kind of polymorphic behavior of different containers with the same components isn’t impossible with the traditional strict ECS approach, but would be quite cumbersome.
+
+As you’ve seen, now we have two types of components: Stats and Abilities. Stats are simply data and the traditional definition of a component, something ‘the container has _ ’, while abilities are the inherited systems that act locally from the containers and can be considered anything that is an action or is of the form ‘the container is being _ed’ or ‘the container is _ing’
+
+To better understand abilities, we need to introduce another set of two components: poses and actions. Poses are viewable physical animations to play (however since the logic includes hitbox detection they are still important to the model, so anything with hitboxes and and poses can not be occluded). While actions are calls to container’s system API functions like players’ move_dir(direction) function being called from a walk ability. Except poses and actions aren’t real components since they are constant for each type of container.
+
+(Note that for readability, it makes sense to type actions and sub section them off into system components, but these components are mandatory to be instanced with their respective containers)
+
+So our abilities will simply be a sequence that when triggered will sequentially go through a set of poses performing different actions. The specific pose and action will be inferred by the container type local to our ability component, additionally, the speed of this sequence and parameters going into these actions will be affected by scalings (hard coded weights to different stat values that the local container has or the root container has)
+
+Now, the only issue is that sure there is a modular character and the stats are quite easily adjustable, but the abilities seem quite static. To add modular abilities we need a final component for components called a modifier. This will act on the ability itself whenever the ability is called. This could include inserting poses and actions, removing them from the set (temporarily of course) adjusting the weights, etc…. This enables the use of general synergies and buffs for different classes of abilities and such as well as the ability to create unique abilities by stacking modifiers.
+
+Class Design (Purpose):
+Containers: These contain a list of type tags so they can be sorted
+	Systems-A set of always active systems that operate without being triggered by abilities, like on spawn, on death, on collision, or more along the lines of PlayerInput and NPCControl or EnemyController etc… these are written into the container class and are also responsible for spawning the default actions.
+Abilities-A sequence of Actions and Poses depending on weighted stats that when triggered triggers the set of actions and poses, or if it has any modifiers triggers on the result of the modifier. The sequence will be of a list of (action, priority, duration) where a wait action of the default container class can work as a warmup and cooldown.
+Recipes-A formula for Input container objects into output container objects dependent on each container’s components, very similar to abilities except the sequence isn’t about timing but about resource consumption and theres no need for priority and modifiers can be applied by parent of the recipe’s container not just as a child of the recipe 
+Components: These should also contain a list of type tags so they can be sorted…
+	Stats-Pure Data, can be static or dynamic
+	Modifiers(Ability or Recipe)-Basically another ability especially since it returns an ability, that is simply supposed to act on an existing ability, so calling it unattached to an ability will likely return an empty set.
+	Actions-An API that when triggered does something to alter the game state depending on the present stats but and is separated into System Components, these components only act when triggered and also are constant among the same containers, (it’s also likely that additional actions can be added to containers as a result of abilities that apply buffs, for example receiving the onfire buff will provide the burning action):
+		Poses-A specific type of action for altering relative 3D positions of child or current containers
+		Movement-Actions that change the physical location of the root container
+		Vision-Actions that change what is visible or alter the camera
+		Utility-Actions that are related to equipping/uneqipping stuff etc…
+		Persistent-Actions that are repeated on a regular interval
+		Combat-Actions that are related to calculating incoming and outgoing damage based on stats… calc_attribute(strength) for example calc_resistance(piercing) for example. 
+Specific Class Inheritance:
+Sortable: Has a list of keywords that can be filtered for, also name and description and alphabetical comparator
+Container: can contain any stat but only some modifiers or actions depending….
+Entity: something existing in the chunk with an active collision hitbox
+	Structure: something that doesn’t have body parts and equippables but just parts? Idk why i would need this over just continuing to use characters….
+	Character: a pointer to a root body part, some default actions, and maybe even some stats
+		PlayerCharacter: includes a player input management system
+Part: something physical with a hitbox and mesh but collision isn’t enabled only hit detection (parts phase through other parts, but entity’s cannot)
+Equippable: Parts that can be slotted into sockets that arent bodyparts (leafs)
+	Organ: Something that is internal and gives actions and applies modifiers probably also probably contributes attributes
+	Armour: Something that is either painted onto the part of simply worn ontop of the part, it has a different set of base stats and can have actions and give abilities
+Tool: Same with armour but is just different
+
+To be honest there is no reason as of now to create a new class for Organs,Armour, or Tools except to make them mutually exclusive which might be sufficient. I guess i could have them generate default stats like organs will have blood consumption and armour will have a resistance profile and tools will have material and durability…
+
+BodyPart: A linked graph connected to other body parts by sockets and has stats and actions justlike a character, basically part is the node class, character is the pointer to the root, and Bodypart is a specialized node while Equippable is a generic leaf class
+Ability: only really here so that it can be a container for a bunch of modifiers
+Recipe: same as above ^, should hold a list of order and priority of modifiers
+Component: guaranteed to be leaves of the tree, can have systems that operate from the leaf position but besides persistent actions must be triggered
+Stat: pure data and the only thing that is a legit modular ECS universal component…
+	Attribute: static changes infrequently, describes default/optimal condition
+	Value: dynamic, constantly changing, triggers actions on certain values, describes the current condition
+Socket: A relative location and orientation to hold an equippable with a filter function, technically isnt a leaf in view mode but is one in model vew
+RecipeModifier: takes in a recipe and returns a modified recipe (does nothing on a non recipe)
+AbilityModifier: takes in an ability and returns a modified ability (does nothing on a non ability)
+Action: Some are default to each container type, others can be added (however, not all are meaningful on all types of containers so this needs to be implemented safely), all can receive parameters and be triggered
+	Movement: move_towards, set_velocity,... 
+	Vision: look_at, set_camera
+	Combat: calculate_damage…
+	Utility: kill, spawn, unequip/equip
+	Persistent: breath, must be turned on or off… 
+	
+
 V1.0.0
 This project is primarily to create a video game that appeals to myself. 
 
