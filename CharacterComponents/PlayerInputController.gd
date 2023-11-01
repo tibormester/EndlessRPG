@@ -67,9 +67,17 @@ func process_input(delta):
 		else:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	#-----
-	
+
+var attacked = false
 		
 func _input(event):
+	if event.is_action_pressed("Attack"):
+		if attacked:
+			attacked = false
+			p.calling_action.emit("Swing")
+		else:
+			attacked = true
+			p.calling_action.emit("Punch")
 	if event.is_action_pressed("Display Stats"):
 		p.calling_action.emit("Display Stats")
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:

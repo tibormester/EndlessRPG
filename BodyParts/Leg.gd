@@ -1,5 +1,7 @@
 class_name Leg extends BodyPart
 
+@onready var p = get_parent()
+
 func reset_stats():
 	stats = {
 		#Health Component
@@ -23,3 +25,11 @@ func reset_stats():
 		},
 		
 	}
+	
+func reset_actions():
+	actions = {
+		"Running" = func lambda(speed):pass,# p.get_parent().get_node("AnimationPlayer").play("Walking", 0.05, speed / 10.0),
+		"Idling" = func lambda(speed): pass,#p.get_parent().get_node("AnimationPlayer").play("RESET", 0.35, speed / 10.0),
+	}
+	
+

@@ -20,10 +20,9 @@ height = 0.3
 
 [node name="Head" type="RigidBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.312797, 0)
-collision_layer = 0
+collision_layer = 2
 collision_mask = 0
 gravity_scale = 2.66454e-15
-freeze = true
 script = ExtResource("1_op7ja")
 stats = null
 actions = null
@@ -50,10 +49,3 @@ skeleton = NodePath("../RightEye")
 [node name="SpringArm3D" type="SpringArm3D" parent="."]
 shape = SubResource("SeparationRayShape3D_mskvo")
 spring_length = 3.0
-
-[node name="ThirdPersonCamera" type="Camera3D" parent="SpringArm3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 3)
-current = true
-
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.449359)

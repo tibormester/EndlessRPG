@@ -90,3 +90,9 @@ func reset_stats():
 #Override with default actions and their callables
 func reset_actions():
 	actions = {}
+	
+func take_damage(damage : float):
+	if stats.has("Health"):
+		stats["Health"] = stats.get("Health", 0.0) - damage
+	if stats.get("Health") <= 0.0:
+		queue_free()

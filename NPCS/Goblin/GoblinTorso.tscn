@@ -79,7 +79,7 @@ _data = {
 }
 
 [node name="GoblinTorso" type="RigidBody3D"]
-collision_layer = 0
+collision_layer = 2
 collision_mask = 0
 script = ExtResource("1_gdbsl")
 
