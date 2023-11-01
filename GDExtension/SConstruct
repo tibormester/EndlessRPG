@@ -1,0 +1,15 @@
+
+env = SConscript('godot-cpp/SConstruct')
+
+env.Append(CPPPATH='src/')
+#env.Append(LIB='...')
+#env.Append(LIBPATH='...')
+
+src = Glob('src/*.cpp')
+
+if env['platform']=='macos':
+    libpath = '../libtest{}{}'.format(env['suffix'], env['SHLIBSUFFIX'])
+    sharedlib = env.SharedLibrary(libpath, src)
+    Default(sharedlib)
+else:
+    pass
