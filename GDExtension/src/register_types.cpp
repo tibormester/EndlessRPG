@@ -11,7 +11,7 @@
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/godot.hpp>
 
-#include "test.h"
+#include "body.h"
 
 using namespace godot;
 
@@ -20,7 +20,7 @@ void initialize_test_module(ModuleInitializationLevel p_level) {
 		return;
 	}
 
-	ClassDB::register_class<Test>();
+	ClassDB::register_class<Body>();
 }
 
 void uninitialize_test_module(ModuleInitializationLevel p_level) {
