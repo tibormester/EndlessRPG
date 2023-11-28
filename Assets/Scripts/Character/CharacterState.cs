@@ -16,7 +16,8 @@ public abstract class CharacterState : MonoBehaviour{
 
     //makes sense to have these on instantiation....
     protected Character character;
-    protected CharacterController controller;
+    protected Rigidbody body;
+    protected CapsuleCollider capsule;
 
     public CharacterState(string n = "Default State"){
         name = n;
@@ -51,7 +52,8 @@ public abstract class CharacterState : MonoBehaviour{
 
     protected virtual void Start(){
         character = GetComponent<Character>();
-        controller = GetComponent<CharacterController>();
+        body = GetComponent<Rigidbody>();
+        capsule = GetComponent<CapsuleCollider>();
     }
     protected virtual void Awake(){
 

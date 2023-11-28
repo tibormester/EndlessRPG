@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class Grounded : CharacterState {
 
-    override protected void FixedUpdate(){
-        Ray ray = new();
-        Vector3 origin = controller.center;
-        origin.y -= ((controller.height / 2f));
-        ray.origin = transform.TransformPoint(origin);
-        ray.direction = Vector3.down;
-        RaycastHit hit;
-        if(controller.isGrounded || Physics.Raycast(ray, out hit, controller.skinWidth * 2)){
-            start();
-        } else { stop();}
-    }
+    // public float floatDistance = 0.1f;
+    // override protected void FixedUpdate(){
+    //     Ray ray = new();
+    //     Vector3 origin = capsule.center;
+    //     origin.y -= ((capsule.height / 2f));
+    //     ray.origin = transform.TransformPoint(origin);
+    //     ray.direction = Vector3.down;
+    //     RaycastHit hit;
+    //     if(Physics.Raycast(ray, out hit, floatDistance)){
+    //         start();
+    //     } else { stop();}
+    // }
 
 }

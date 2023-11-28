@@ -39,7 +39,7 @@ public class Look : CharacterAction {
         camera.RotateAround(transform.position, transform.up, lookDirection.x * sensitivity);
         camera.RotateAround(transform.position, camera.right, lookDirection.y * sensitivity);
 
-        character.lookDirection = transform.InverseTransformDirection(focus.point - transform.position);
+        //character.lookDirection = transform.InverseTransformDirection(focus.point - transform.position);
 
         
     }
@@ -62,7 +62,7 @@ public class Look : CharacterAction {
     }
 
     public void LookAt(RaycastHit hit){
-        LookAt(hit.rigidbody.gameObject.transform.position);
+        LookAt(hit.rigidbody.transform.position);
     }
     public void LookAt(Vector3 global_position){
         //TODO IMPLEMENT LATER

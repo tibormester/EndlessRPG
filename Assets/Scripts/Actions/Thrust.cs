@@ -24,7 +24,7 @@ public class Thrust : CharacterAction
     protected override void Begin()
     {
         base.Begin();
-        startLocation = (character.lookDirection.normalized * controller.radius);
+        startLocation = (character.lookDirection.normalized * capsule.radius);
         difference = (transform.TransformPoint(startLocation) - sword.transform.position);
         distance = difference.magnitude;
         stage = 0;

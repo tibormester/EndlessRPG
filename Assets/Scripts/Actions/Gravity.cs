@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Gravity : CharacterAction {
@@ -8,6 +9,12 @@ public class Gravity : CharacterAction {
     float terminal_velocity = 0.6f;
 
     float drag = 0.003f;
+
+    float floatHeight = 0.1f;
+    float floatBuffer = 0.1f;
+
+    float springStrength = 1f;
+    float springDampen = 1f;
     new void Start(){
         base.Start();
         grounded = GetComponent<Grounded>();
@@ -15,6 +22,37 @@ public class Gravity : CharacterAction {
     // Update is called once per frame
     override protected void FixedUpdateTick()
     {
+        Vector3 downDirection = -1 * transform.up;
+        RaycastHit hit;
+        if(Physics.Raycast(character.bottom, downDirection, out hit, floatHeight + floatBuffer)){
+            grounded.start();
+
+            Vector3 velocity = body.velocity;
+            Vector3 groundVelocity = Vector3.zero;
+
+            Rigidbody ground = hit.rigidbody;
+            if (ground != null){
+                groundVelocity = ground.velocity;
+            }
+
+            float characterSpeed = Vector3.Dot(downDirection, velocity);
+            float groundSpeed = Vector3.Dot(groundVelocity, groundVelocity);
+
+            float relativeSpeed = characterSpeed - groundSpeed;
+
+            float delta = hit.distance - floatHeight;
+
+            float springForce = (delta * springStrength) - (relativeSpeed * springDampen);
+
+            body.AddForce(springForce * downDirection);
+            if (ground != null){
+                body.AddForceAtPosition(-springForce * downDirection, hit.point);
+            }
+        } else{
+            grounded.stop();
+        }
+
+
         //If on the ground remove any vertical momentum
         //TODO: add an impact force to whatever we collide with scaling with the speed we reached....
         if (grounded.active && character.momentum.y <= 0f){

@@ -11,6 +11,9 @@ public class Character : MonoBehaviour
 
     new public Camera camera;
 
+    public Rigidbody capsuleBody;
+    public CapsuleCollider capsuleCollider;
+
     //Velocity from things like explosions, gravity, being shoved etc... uncapped
     public Vector3 momentum;
     //Velocity from player driven actions
@@ -25,17 +28,28 @@ public class Character : MonoBehaviour
     public Vector3 moveDirection;
     public Vector3 lookDirection;
 
-    public CharacterController controller;
     public HumanoidPlayerControls actions;
 
     public Grounded grounded;
     public Walk walk;
     public Look look;
 
+
+    //For convenient access to local position of the edges of our capsule collider
+    public Vector3 top {get => capsuleCollider.center + ( transform.up * capsuleCollider.height * -0.5f);}
+    public Vector3 bottom {get => capsuleCollider.center + ( transform.up * capsuleCollider.height * 0.5f);}
+    public Vector3 left {get => capsuleCollider.center + ( transform.right * -1 * capsuleCollider.radius);}
+    public Vector3 right {get => capsuleCollider.center + ( transform.right * capsuleCollider.radius);}
+    public Vector3 front {get => capsuleCollider.center + ( transform.forward * capsuleCollider.radius);}
+    public Vector3 back {get => capsuleCollider.center + ( transform.forward * -1 * capsuleCollider.radius);}
+
+
     // Start is called before the first frame update
     void Start()
     {
-        controller = GetComponent<CharacterController>();
+        capsuleBody = GetComponent<Rigidbody>();
+        capsuleCollider = GetComponent<CapsuleCollider>();
+
     }
 
     void Awake(){
@@ -85,11 +99,14 @@ public class Character : MonoBehaviour
 
         pastLocomotion = locomotion;
         pastMomentum = momentum;
-        controller.Move(transform.TransformPoint(velocity) - transform.position);
+        capsuleBody.AddForce(transform.TransformDirection(velocity));
+        //controller.Move(transform.TransformPoint(velocity) - transform.position);
     }
 
     private float collisionCooldown = 0.05f;
     private float collisionTimer = 0f;
+
+    //Hace to refactor...
     private void OnControllerColliderHit(ControllerColliderHit hit) {
         //if ( collisionTimer > 0) return;
         //Treat what we collided with as at rest, get our normal from our past position to our collided position

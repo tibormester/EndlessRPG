@@ -11,7 +11,8 @@ public abstract class CharacterAction : MonoBehaviour
     
 
     protected Character character;
-    protected CharacterController controller;
+    protected Rigidbody body;
+    protected CapsuleCollider capsule;
 
     protected virtual void UpdateTick(){
 
@@ -70,7 +71,8 @@ public abstract class CharacterAction : MonoBehaviour
     }
     protected virtual void Start(){
         character = GetComponent<Character>();
-        controller = GetComponent<CharacterController>();
+        body = GetComponent<Rigidbody>();
+        capsule = GetComponent<CapsuleCollider>();
     }
 
     private void Update(){
