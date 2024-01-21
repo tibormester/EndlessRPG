@@ -13,12 +13,20 @@ Progress
 For this project, I have avoided using assets. In hindsight, this has been quite the delay as I have had to learn to create these assets through script, which is a lot harder than anticipated. However, it has been quite rewarding and has helped me better understand *Unity* as an engine. The idea of avoiding assets was primarily to make things easier for the procedural generation of the characters. The obvious approach in hindsight is to have assets for each body part and scale them a bit as well as pick randomly from a pool of them for variation. However, I decided to simply sketch them out as a bunch of quadrilaterals defining their dimensions at varying heights and quickly creating meshes from that data. This method gives me more control over the mesh data itself, but that level of control isn't necessary. Especially since a lot of runtime tweaks to the mesh will be done with shaders regardless and having each body part as a separate mesh instead of a skinned mesh might have been simpler for things like dismemberment... So all that said, I will likely maintain this workflow of sketching out models as basic geometric shapes through code and when this project reaches the polishing stage I will aim to hire an artist to create assets and refactor this code.
  
  Part of creating the mesh was learning that *Unity* doesn't seem to want people doing too much animating through script. Sure creating the mesh itself is fine and documented enough, but both the legacy and new animation systems are a struggle to get working without prebuilt animation assets. And even then they seem to lack libraries for generating more complex animation curves on the fly. As a result, I am setting out to simply ignore the animation systems and write my own self-contained animation components for objects that need it. Part of this is using IK specifically FABRIK and Trig for 2-bone IK. This will make it easier to incorporate more dynamic animations since it should come more naturally; however, I have started to notice it also leads to more convoluted systems without the easy-to-use state machine GUI. I hope to resolve this issue soon (As well as implement rotations and constraints to my Fabrik algorithm).
+ 
+https://github.com/tibormester/EndlessRPG/assets/67936278/d4d2cde1-c196-454d-ad3d-754eeb0c9c3c
+
+
   
 **Character Controller**
 
 So for a character, I have a rigid body with rotation locked and no gravity that is pushed around by forces. Although there is a box collider as a hitbox for the character, it remains floating above a pair of ray casts, one straight down, and another in the direction of motion (clamped to 45 degrees). These ray casts look for the ground and when found linearly phase out gravity while introducing a spring force with velocity dampening that aims to keep the boxcollider hoovering. The result is that going over minor bumps and debris is done seamlessly without constant raytracing for collisions to step over. The downside for some applications is that the character controller might feel slightly floaty and may bounce, but by tweaking dampening values and spring strength I was able to achieve a result that feels decent. Additionally, the responsiveness of the character controller was later fixed after I implemented forces that dampen velocity in non-movement input directions.
  
  All in all, there are a few of the very basic movement features: jumping/doubling jumping, turning the body towards movement while turning the head towards the camera, rotating to be normal to surfaces, and instant changes in directions and drag. This all creates a physics-based controller that feels pretty responsive, which is ideal. Implementing these features sounds simple, and it is; however, after starting this project and going through this phase a handful of times, no two attempts have been the same. Fine-tuning and tweaking decisions made on the character controller is a complex topic that will need more polish and is currently beyond my limited experience.
+
+https://github.com/tibormester/EndlessRPG/assets/67936278/b5947b28-d26b-4ae0-8f54-376a636938ce
+
+
 
 -------
 
