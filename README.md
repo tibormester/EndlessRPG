@@ -57,4 +57,7 @@ Physics-based combat is by far the most immersive and simply cool. However, it c
 
 A sandbox game doesn't exist without some form of crafting. Nearly every MMO is a combination of Combat, RPG, and Economy. But in a single-player game, aiming for an entire Economy is a bit ambitious so I will settle for simply crafting. This aspect of the game design may be a bit selfish, but I have always been driven to games where the Economy is Tall and Wide. I want to be able to have ownership of every part of the process of harvesting resources, creating the goods, to shipping and selling; while at the same time having enough complexity in the systems that there are plenty of viable points of entry into the economy. I know this is an ambitious goal which is why I hope that with each iteration of a new fantasy flavor, not only will I grow the breadth of the crafting system, but also the depth. For example, the flying pirates will come with the need for hiring guards for shipping lanes as well as the ability to craft one's own flying ships.
 
+**Procedural Generation**
+
+Currently, this project is on hold while I work on my team's class project. We are using a search algorithm for procedural generation. I plan to incorporate the tech into this project in Summer 2024.
  	
